@@ -6,13 +6,18 @@ import (
 	"net/http"
 )
 
-func main() {
+func main()  {
 	http.HandleFunc("/", indexHandler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	http.HandleFunc("/hello", helloHandler)
+	log.Fatal(http.ListenAndServe(":9999", nil))
 }
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	for index, value := range r.Header {
-		fmt.Fprintf(w, "index: %s, value: %s\n", index, value)
+func indexHandler(w http.ResponseWriter, req *http.Request) {
+	fmt.Fprintf(w, "URL.Path = %q\n", req.URL.Path)
+}
+
+func helloHandler(w http.ResponseWriter, req *http.Request) {
+	for k, v := range req.Header {
+		fmt.Fprintf(w, "Header[%q] = %q\n", k, v)
 	}
 }
